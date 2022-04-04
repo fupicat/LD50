@@ -1,0 +1,1379 @@
+[gd_scene load_steps=89 format=2]
+
+[ext_resource path="res://Circle.png" type="Texture" id=1]
+[ext_resource path="res://Game.gd" type="Script" id=2]
+[ext_resource path="res://Outlet.gd" type="Script" id=3]
+[ext_resource path="res://Bullets/RoundBullet.tscn" type="PackedScene" id=4]
+[ext_resource path="res://EnemySpawner.gd" type="Script" id=5]
+[ext_resource path="res://Enemies/Round.tscn" type="PackedScene" id=6]
+[ext_resource path="res://TypeBlaster.gd" type="Script" id=7]
+[ext_resource path="res://Bullets/TriangleBullet.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Enemies/Triangle.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Enemies/Square.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Bullets/SquareBullet.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Bullets/CubicBullet.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Enemies/Cubic.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Enemies/Round2.png" type="Texture" id=14]
+[ext_resource path="res://Gun.png" type="Texture" id=15]
+[ext_resource path="res://Enemies/Cubic2.png" type="Texture" id=16]
+[ext_resource path="res://HazardBack.png" type="Texture" id=17]
+[ext_resource path="res://HazardFore.png" type="Texture" id=18]
+[ext_resource path="res://Enemies/Triangle2.png" type="Texture" id=19]
+[ext_resource path="res://Enemies/Square2.png" type="Texture" id=20]
+[ext_resource path="res://OutletExtender.png" type="Texture" id=21]
+[ext_resource path="res://Heart.png" type="Texture" id=22]
+[ext_resource path="res://Plug.png" type="Texture" id=23]
+[ext_resource path="res://Plugs.png" type="Texture" id=24]
+[ext_resource path="res://SFX/awake10_megaWall.ogg" type="AudioStream" id=25]
+[ext_resource path="res://SFX/Woop.wav" type="AudioStream" id=26]
+[ext_resource path="res://SFX/Snap.wav" type="AudioStream" id=27]
+[ext_resource path="res://Poppins-SemiBold.ttf" type="DynamicFontData" id=28]
+[ext_resource path="res://SFX/Explode.wav" type="AudioStream" id=29]
+[ext_resource path="res://GameOver.png" type="Texture" id=30]
+[ext_resource path="res://SFX/Damage.wav" type="AudioStream" id=31]
+[ext_resource path="res://StripeBG.png" type="Texture" id=32]
+[ext_resource path="res://Vignette.png" type="Texture" id=33]
+[ext_resource path="res://CameraShake.gd" type="Script" id=34]
+[ext_resource path="res://Particles/Smoke1.png" type="Texture" id=35]
+[ext_resource path="res://Particles/Smoke2.png" type="Texture" id=36]
+[ext_resource path="res://Particles/Smoke3.png" type="Texture" id=37]
+[ext_resource path="res://Story.gd" type="Script" id=38]
+[ext_resource path="res://SFX/Hooray.wav" type="AudioStream" id=39]
+[ext_resource path="res://SFX/Ayo.wav" type="AudioStream" id=40]
+[ext_resource path="res://YouWin.png" type="Texture" id=41]
+
+[sub_resource type="Shader" id=52]
+code = "shader_type canvas_item;
+
+uniform float scroll_speed = 0.08;
+//uniform vec2 texture_scroll = vec2(1.0, 0.0);
+
+void fragment()
+{
+    vec2 uv = UV;
+    uv.x = UV.x * 1.0 + pow(abs(sin(3.14 * UV.x/2.0)),2.0);
+    
+    //COLOR = texture(TEXTURE, uv + texture_scroll);
+    COLOR = texture(TEXTURE, uv + (scroll_speed * TIME));
+}"
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 52 )
+shader_param/scroll_speed = 0.129
+
+[sub_resource type="Animation" id=15]
+resource_name = "Go"
+length = 40.0
+loop = true
+step = 1.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 10, 20, 30 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 0.443137, 0.443137, 1 ), Color( 0.968627, 1, 0.443137, 1 ), Color( 0.443137, 1, 0.67451, 1 ), Color( 0.443137, 0.490196, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureRect:rect_rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 20 ),
+"transitions": PoolRealArray( -2, -2 ),
+"update": 0,
+"values": [ 3.47537, -3.6 ]
+}
+
+[sub_resource type="Animation" id=16]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("TextureRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 0.443137, 0.443137, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("TextureRect:rect_rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 3.47537 ]
+}
+
+[sub_resource type="CanvasItemMaterial" id=19]
+blend_mode = 1
+
+[sub_resource type="Curve" id=20]
+min_value = -200.0
+max_value = 200.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.380597, -69.0909 ), 0.0, 0.0, 0, 0, Vector2( 0.731343, 72.7273 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=21]
+_data = [ Vector2( 0, 1 ), 0.0, 1.4, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=22]
+colors = PoolColorArray( 1, 0, 0.609375, 1, 0.0801697, 0, 0.277344, 1 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 38
+font_data = ExtResource( 28 )
+
+[sub_resource type="DynamicFont" id=53]
+size = 21
+font_data = ExtResource( 28 )
+
+[sub_resource type="DynamicFont" id=36]
+size = 18
+font_data = ExtResource( 28 )
+
+[sub_resource type="StyleBoxEmpty" id=47]
+
+[sub_resource type="StyleBoxEmpty" id=48]
+
+[sub_resource type="StyleBoxEmpty" id=49]
+
+[sub_resource type="StyleBoxEmpty" id=50]
+
+[sub_resource type="StyleBoxEmpty" id=51]
+
+[sub_resource type="Animation" id=9]
+resource_name = "Go"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Control/Fade:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.705882 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Control/GameOver:rect_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.35, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 2.738, 2.738 ), Vector2( 1, 0.9 ), Vector2( 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Control/GameOver:rect_rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.35 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 360.0, 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Control/GameOver:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.35 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Control/Fade/Label:percent_visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 0.5, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0, 1.0 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Control:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Control:mouse_filter")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=10]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Control/Fade:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0.498039 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Control/GameOver:rect_scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Control/GameOver:rect_rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Control/GameOver:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Control/Fade/Label:percent_visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Control:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Control:mouse_filter")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 2 ]
+}
+
+[sub_resource type="Animation" id=31]
+resource_name = "Explode"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.268392, 0.268392 ), Vector2( 0.6, 0.6 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -360.0, 360.0 ]
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath(".:position:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 122, -0.25, 0, 0, -0.499847, 308.7, 0, 0.32634, 0.25, 0 ),
+"times": PoolRealArray( 0, 1 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath(".:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 186, -0.25, 0, 0.3, -210.644, 642.994, -0.2, -680.477, 0.25, 0 ),
+"times": PoolRealArray( 0, 1 )
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:z_index")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 1 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath(".:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 2 ),
+"update": 0,
+"values": [ Color( 0.694118, 0.694118, 0.694118, 1 ), Color( 0.0745098, 0.0745098, 0.0745098, 1 ) ]
+}
+
+[sub_resource type="Animation" id=32]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 122, 186 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0.268392, 0.268392 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath(".:position:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 122, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/4/type = "bezier"
+tracks/4/path = NodePath(".:position:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"points": PoolRealArray( 186, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath(".:z_index")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.25, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath(".:modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Curve" id=26]
+min_value = -360.0
+max_value = 360.0
+_data = [ Vector2( 0, 1 ), 0.0, 423.865, 0, 0, Vector2( 1, 163.636 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=28]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0164619, 0, 0, Vector2( 1, 1 ), -0.135354, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=27]
+offsets = PoolRealArray( 0, 0.846847, 1 )
+colors = PoolColorArray( 0, 0, 0, 0, 0.533333, 0.533333, 0.533333, 0.694118, 0, 0, 0, 0 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 37.5, 45 )
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 38, 35 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 37.5, 43.5 )
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 32.0156
+
+[sub_resource type="Animation" id=29]
+resource_name = "Blink"
+length = 0.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("FireHazard:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.23518, 0.23518 ), Vector2( 0.244277, 0.244277 ) ]
+}
+
+[sub_resource type="Animation" id=30]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("FireHazard:rect_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0.23518, 0.23518 ) ]
+}
+
+[sub_resource type="CanvasItemMaterial" id=23]
+blend_mode = 1
+
+[sub_resource type="Animation" id=24]
+resource_name = "Hurt"
+length = 0.6
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0.360784, 0.360784, 0.360784, 1 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=25]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="DynamicFont" id=33]
+size = 35
+font_data = ExtResource( 28 )
+
+[sub_resource type="DynamicFont" id=34]
+size = 21
+font_data = ExtResource( 28 )
+
+[sub_resource type="StyleBoxEmpty" id=42]
+
+[sub_resource type="StyleBoxEmpty" id=43]
+
+[sub_resource type="StyleBoxEmpty" id=44]
+
+[sub_resource type="StyleBoxEmpty" id=45]
+
+[sub_resource type="StyleBoxEmpty" id=46]
+
+[sub_resource type="StyleBoxEmpty" id=37]
+
+[sub_resource type="StyleBoxEmpty" id=38]
+
+[sub_resource type="StyleBoxEmpty" id=39]
+
+[sub_resource type="StyleBoxEmpty" id=40]
+
+[sub_resource type="StyleBoxEmpty" id=41]
+
+[sub_resource type="DynamicFont" id=35]
+size = 25
+font_data = ExtResource( 28 )
+
+[sub_resource type="Animation" id=54]
+resource_name = "Go"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.297302, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 0.579, 0.579 ) ]
+}
+
+[sub_resource type="Animation" id=55]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+follow_viewport_enable = true
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -117.0
+margin_top = -171.0
+margin_right = 207.0
+margin_bottom = 95.0
+rect_rotation = 3.51141
+mouse_filter = 2
+color = Color( 0.937255, 0.643137, 0.643137, 1 )
+
+[node name="TextureRect" type="TextureRect" parent="Background"]
+modulate = Color( 1, 0.443137, 0.443137, 1 )
+self_modulate = Color( 1, 1, 1, 0.192157 )
+material = SubResource( 18 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -146.27
+margin_top = -133.896
+margin_right = 171.73
+margin_bottom = 152.104
+rect_rotation = 3.47537
+rect_pivot_offset = Vector2( 754, 328 )
+mouse_filter = 2
+texture = ExtResource( 32 )
+expand = true
+stretch_mode = 2
+
+[node name="Anim" type="AnimationPlayer" parent="Background"]
+autoplay = "Go"
+anims/Go = SubResource( 15 )
+anims/RESET = SubResource( 16 )
+
+[node name="Particles" type="CPUParticles2D" parent="Background"]
+material = SubResource( 19 )
+position = Vector2( 593, 429 )
+amount = 37
+lifetime = 5.33
+texture = ExtResource( 1 )
+emission_shape = 2
+emission_rect_extents = Vector2( 622, 1 )
+gravity = Vector2( 0, -48 )
+tangential_accel = -51.35
+tangential_accel_random = 1.0
+tangential_accel_curve = SubResource( 20 )
+scale_amount = 0.03
+scale_amount_random = 0.1
+scale_amount_curve = SubResource( 21 )
+color = Color( 0.470588, 0, 1, 0.258824 )
+color_ramp = SubResource( 22 )
+
+[node name="Lose" type="CanvasLayer" parent="."]
+
+[node name="SFX" type="AudioStreamPlayer" parent="Lose"]
+stream = ExtResource( 29 )
+volume_db = -12.0
+
+[node name="Control" type="Control" parent="Lose"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Fade" type="ColorRect" parent="Lose/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.498039 )
+
+[node name="Label" type="Label" parent="Lose/Control/Fade"]
+margin_left = 807.0
+margin_top = 98.0
+margin_right = 1087.0
+margin_bottom = 266.0
+custom_fonts/font = SubResource( 8 )
+text = "You lasted
+5000000
+seconds"
+align = 1
+
+[node name="Record" type="Label" parent="Lose/Control/Fade"]
+margin_left = 557.0
+margin_top = 29.0
+margin_right = 1162.0
+margin_bottom = 60.0
+custom_fonts/font = SubResource( 53 )
+text = "Your record: 500"
+align = 2
+
+[node name="GameOver" type="TextureRect" parent="Lose/Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -252.0
+margin_top = -124.0
+margin_right = 140.0
+margin_bottom = 110.0
+rect_pivot_offset = Vector2( 194, 117 )
+texture = ExtResource( 30 )
+expand = true
+
+[node name="Retry" type="Button" parent="Lose/Control"]
+margin_left = 975.0
+margin_top = 306.0
+margin_right = 1152.0
+margin_bottom = 349.0
+mouse_default_cursor_shape = 2
+custom_fonts/font = SubResource( 36 )
+custom_styles/hover = SubResource( 47 )
+custom_styles/pressed = SubResource( 48 )
+custom_styles/focus = SubResource( 49 )
+custom_styles/disabled = SubResource( 50 )
+custom_styles/normal = SubResource( 51 )
+text = "TRY AGAIN"
+
+[node name="Menu" type="Button" parent="Lose/Control"]
+margin_left = 751.0
+margin_top = 306.0
+margin_right = 928.0
+margin_bottom = 349.0
+mouse_default_cursor_shape = 2
+custom_fonts/font = SubResource( 36 )
+custom_styles/hover = SubResource( 47 )
+custom_styles/pressed = SubResource( 48 )
+custom_styles/focus = SubResource( 49 )
+custom_styles/disabled = SubResource( 50 )
+custom_styles/normal = SubResource( 51 )
+text = "MAIN MENU"
+
+[node name="Anim" type="AnimationPlayer" parent="Lose"]
+anims/Go = SubResource( 9 )
+anims/RESET = SubResource( 10 )
+
+[node name="Vignette" type="Sprite" parent="."]
+modulate = Color( 0, 0, 0, 0 )
+position = Vector2( 597.5, 187 )
+scale = Vector2( 1.04286, 1.14595 )
+z_index = 1
+texture = ExtResource( 33 )
+
+[node name="OutletExtender" type="Sprite" parent="."]
+position = Vector2( 122, 186 )
+scale = Vector2( 0.268392, 0.268392 )
+texture = ExtResource( 21 )
+
+[node name="Outlet1" type="Sprite" parent="OutletExtender"]
+visible = false
+position = Vector2( -3.72601, -275.716 )
+texture = ExtResource( 24 )
+region_enabled = true
+region_rect = Rect2( 259.641, 126.277, 242.448, 217.876 )
+
+[node name="Outlet2" type="Sprite" parent="OutletExtender"]
+visible = false
+position = Vector2( -3.72601, 3.72614 )
+texture = ExtResource( 24 )
+region_enabled = true
+region_rect = Rect2( 253.751, 446.108, 253.516, 137.623 )
+
+[node name="Outlet3" type="Sprite" parent="OutletExtender"]
+visible = false
+position = Vector2( -3.72601, 283.168 )
+texture = ExtResource( 24 )
+flip_v = true
+region_enabled = true
+region_rect = Rect2( 259.641, 126.277, 242.448, 217.876 )
+
+[node name="Anim" type="AnimationPlayer" parent="OutletExtender"]
+autoplay = "RESET"
+anims/Explode = SubResource( 31 )
+anims/RESET = SubResource( 32 )
+
+[node name="Smoke" type="CPUParticles2D" parent="."]
+position = Vector2( 103, 157 )
+scale = Vector2( 0.268392, 0.268392 )
+emitting = false
+lifetime = 3.72
+texture = ExtResource( 35 )
+emission_shape = 1
+emission_sphere_radius = 82.53
+gravity = Vector2( 0, -120 )
+radial_accel = -21.62
+tangential_accel = -21.62
+tangential_accel_random = 1.0
+angle = -720.0
+angle_random = 1.0
+angle_curve = SubResource( 26 )
+scale_amount = 2.36
+scale_amount_curve = SubResource( 28 )
+color_ramp = SubResource( 27 )
+
+[node name="Smoke2" type="CPUParticles2D" parent="."]
+position = Vector2( 118, 161 )
+scale = Vector2( 0.268392, 0.268392 )
+emitting = false
+lifetime = 3.72
+texture = ExtResource( 36 )
+emission_shape = 1
+emission_sphere_radius = 82.53
+gravity = Vector2( 0, -120 )
+radial_accel = -21.62
+tangential_accel = -21.62
+tangential_accel_random = 1.0
+angle = -720.0
+angle_random = 1.0
+angle_curve = SubResource( 26 )
+scale_amount = 2.36
+scale_amount_curve = SubResource( 28 )
+color_ramp = SubResource( 27 )
+
+[node name="Smoke3" type="CPUParticles2D" parent="."]
+position = Vector2( 129, 154 )
+scale = Vector2( 0.268392, 0.268392 )
+emitting = false
+lifetime = 3.72
+texture = ExtResource( 37 )
+emission_shape = 1
+emission_sphere_radius = 82.53
+gravity = Vector2( 0, -120 )
+radial_accel = -21.62
+tangential_accel = -21.62
+tangential_accel_random = 1.0
+angle = -720.0
+angle_random = 1.0
+angle_curve = SubResource( 26 )
+scale_amount = 2.36
+scale_amount_curve = SubResource( 28 )
+color_ramp = SubResource( 27 )
+
+[node name="Outlet1" type="Area2D" parent="." groups=["outlet"]]
+position = Vector2( 122, 90 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Col" type="CollisionShape2D" parent="Outlet1"]
+position = Vector2( -1, 16 )
+shape = SubResource( 6 )
+
+[node name="Line2D" type="Line2D" parent="Outlet1"]
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="SFX" type="AudioStreamPlayer" parent="Outlet1"]
+stream = ExtResource( 27 )
+
+[node name="Outlet2" type="Area2D" parent="." groups=["outlet"]]
+position = Vector2( 120, 187 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Col" type="CollisionShape2D" parent="Outlet2"]
+position = Vector2( 1, 0 )
+shape = SubResource( 7 )
+
+[node name="Line2D" type="Line2D" parent="Outlet2"]
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="SFX" type="AudioStreamPlayer" parent="Outlet2"]
+stream = ExtResource( 27 )
+
+[node name="Outlet3" type="Area2D" parent="." groups=["outlet"]]
+position = Vector2( 122, 284 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Col" type="CollisionShape2D" parent="Outlet3"]
+position = Vector2( -1, -17.5 )
+shape = SubResource( 5 )
+
+[node name="Line2D" type="Line2D" parent="Outlet3"]
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="SFX" type="AudioStreamPlayer" parent="Outlet3"]
+stream = ExtResource( 27 )
+
+[node name="RoundB" type="Area2D" parent="."]
+position = Vector2( 224, 86 )
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+bullet = ExtResource( 4 )
+group = "round"
+
+[node name="Line2D" type="Line2D" parent="RoundB"]
+default_color = Color( 0.631373, 1, 0.792157, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="Icon" type="Sprite" parent="RoundB"]
+self_modulate = Color( 0.294118, 1, 0.603922, 1 )
+scale = Vector2( 0.13, 0.13 )
+texture = ExtResource( 15 )
+
+[node name="Time" type="TextureProgress" parent="RoundB/Icon"]
+modulate = Color( 1, 1, 1, 0.564706 )
+margin_left = -184.615
+margin_top = -130.769
+margin_right = 315.385
+margin_bottom = 369.231
+rect_scale = Vector2( 0.438301, 0.438301 )
+mouse_filter = 2
+value = 100.0
+texture_progress = ExtResource( 1 )
+fill_mode = 5
+radial_initial_angle = 90.0
+
+[node name="Icon" type="Sprite" parent="RoundB/Icon"]
+position = Vector2( -184.615, -123.077 )
+scale = Vector2( 0.376923, 0.376923 )
+texture = ExtResource( 14 )
+
+[node name="Col" type="CollisionShape2D" parent="RoundB"]
+shape = SubResource( 4 )
+
+[node name="Plug" type="Sprite" parent="RoundB"]
+visible = false
+position = Vector2( -22, -33 )
+scale = Vector2( 0.209, -0.209 )
+z_index = 1
+texture = ExtResource( 23 )
+offset = Vector2( -60.3476, -87.2524 )
+
+[node name="SFX" type="AudioStreamPlayer" parent="RoundB"]
+stream = ExtResource( 26 )
+volume_db = 6.667
+pitch_scale = 1.2
+
+[node name="TriangleB" type="Area2D" parent="."]
+position = Vector2( 224, 153 )
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+bullet = ExtResource( 8 )
+group = "triangle"
+
+[node name="Line2D" type="Line2D" parent="TriangleB"]
+default_color = Color( 1, 0.992157, 0.552941, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="Icon" type="Sprite" parent="TriangleB"]
+self_modulate = Color( 1, 0.94902, 0.207843, 1 )
+scale = Vector2( 0.13, 0.13 )
+texture = ExtResource( 15 )
+
+[node name="Time" type="TextureProgress" parent="TriangleB/Icon"]
+modulate = Color( 1, 1, 1, 0.564706 )
+margin_left = -184.616
+margin_top = -130.769
+margin_right = 315.384
+margin_bottom = 369.231
+rect_scale = Vector2( 0.438301, 0.438301 )
+mouse_filter = 2
+value = 100.0
+texture_progress = ExtResource( 1 )
+fill_mode = 5
+radial_initial_angle = 90.0
+
+[node name="Icon" type="Sprite" parent="TriangleB/Icon"]
+position = Vector2( -184.615, -123.077 )
+scale = Vector2( 0.376923, 0.376923 )
+texture = ExtResource( 19 )
+
+[node name="Col" type="CollisionShape2D" parent="TriangleB"]
+shape = SubResource( 4 )
+
+[node name="Plug" type="Sprite" parent="TriangleB"]
+visible = false
+position = Vector2( -22, -33 )
+scale = Vector2( 0.209, -0.209 )
+z_index = 1
+texture = ExtResource( 23 )
+offset = Vector2( -60.3476, -87.2524 )
+
+[node name="SFX" type="AudioStreamPlayer" parent="TriangleB"]
+stream = ExtResource( 26 )
+volume_db = 6.667
+pitch_scale = 1.2
+
+[node name="SquareB" type="Area2D" parent="."]
+position = Vector2( 224, 219 )
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+bullet = ExtResource( 11 )
+group = "square"
+
+[node name="Line2D" type="Line2D" parent="SquareB"]
+default_color = Color( 1, 0.572549, 0.572549, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="Icon" type="Sprite" parent="SquareB"]
+self_modulate = Color( 1, 0.262745, 0.262745, 1 )
+scale = Vector2( 0.13, 0.13 )
+texture = ExtResource( 15 )
+
+[node name="Time" type="TextureProgress" parent="SquareB/Icon"]
+modulate = Color( 1, 1, 1, 0.564706 )
+margin_left = -184.615
+margin_top = -130.769
+margin_right = 315.385
+margin_bottom = 369.231
+rect_scale = Vector2( 0.438301, 0.438301 )
+mouse_filter = 2
+value = 100.0
+texture_progress = ExtResource( 1 )
+fill_mode = 5
+radial_initial_angle = 90.0
+
+[node name="Icon" type="Sprite" parent="SquareB/Icon"]
+position = Vector2( -184.615, -123.077 )
+scale = Vector2( 0.376923, 0.376923 )
+texture = ExtResource( 20 )
+
+[node name="Col" type="CollisionShape2D" parent="SquareB"]
+shape = SubResource( 4 )
+
+[node name="Plug" type="Sprite" parent="SquareB"]
+visible = false
+position = Vector2( -22, -33 )
+scale = Vector2( 0.209163, 0.209163 )
+z_index = 1
+texture = ExtResource( 23 )
+offset = Vector2( -60.3476, -87.2524 )
+
+[node name="SFX" type="AudioStreamPlayer" parent="SquareB"]
+stream = ExtResource( 26 )
+volume_db = 6.667
+pitch_scale = 1.2
+
+[node name="CubicB" type="Area2D" parent="."]
+position = Vector2( 224, 286 )
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
+bullet = ExtResource( 12 )
+group = "cubic"
+
+[node name="Line2D" type="Line2D" parent="CubicB"]
+default_color = Color( 1, 0.607843, 0.984314, 1 )
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+
+[node name="Icon" type="Sprite" parent="CubicB"]
+self_modulate = Color( 1, 0.423529, 0.921569, 1 )
+scale = Vector2( 0.13, 0.13 )
+texture = ExtResource( 15 )
+
+[node name="Time" type="TextureProgress" parent="CubicB/Icon"]
+modulate = Color( 1, 1, 1, 0.564706 )
+margin_left = -184.615
+margin_top = -130.769
+margin_right = 315.385
+margin_bottom = 369.231
+rect_scale = Vector2( 0.438301, 0.438301 )
+mouse_filter = 2
+value = 100.0
+texture_progress = ExtResource( 1 )
+fill_mode = 5
+radial_initial_angle = 90.0
+
+[node name="Icon" type="Sprite" parent="CubicB/Icon"]
+position = Vector2( -184.615, -123.077 )
+scale = Vector2( 0.376923, 0.376923 )
+texture = ExtResource( 16 )
+
+[node name="Col" type="CollisionShape2D" parent="CubicB"]
+shape = SubResource( 4 )
+
+[node name="Plug" type="Sprite" parent="CubicB"]
+visible = false
+position = Vector2( -22, -33 )
+scale = Vector2( 0.209, 0.209 )
+z_index = 1
+texture = ExtResource( 23 )
+offset = Vector2( -60.3476, -87.2524 )
+
+[node name="SFX" type="AudioStreamPlayer" parent="CubicB"]
+stream = ExtResource( 26 )
+volume_db = 6.667
+pitch_scale = 1.2
+
+[node name="RoundSpawner" type="Timer" parent="."]
+script = ExtResource( 5 )
+enemy = ExtResource( 6 )
+random = 5.0
+min_wave = 7
+max_wave = 15
+
+[node name="TriangleSpawner" type="Timer" parent="."]
+script = ExtResource( 5 )
+enemy = ExtResource( 9 )
+spawn = 2.0
+random = 2.0
+level_start = 2
+survive_till = 10
+
+[node name="SquareSpawner" type="Timer" parent="."]
+script = ExtResource( 5 )
+enemy = ExtResource( 10 )
+spawn = 10.0
+wave = 1
+min_wave = 1
+max_wave = 7
+level_start = 3
+survive_till = 25
+
+[node name="CubicSpawner" type="Timer" parent="."]
+script = ExtResource( 5 )
+enemy = ExtResource( 13 )
+random = 5.0
+wave = 99
+min_wave = 1
+max_wave = 1
+level_start = 4
+survive_till = 30
+
+[node name="FireHazard" type="TextureProgress" parent="."]
+margin_left = -60.0
+margin_top = -257.0
+margin_right = 125.0
+margin_bottom = 608.0
+rect_scale = Vector2( 0.23518, 0.23518 )
+rect_pivot_offset = Vector2( 95.0412, 425.206 )
+step = 0.01
+texture_under = ExtResource( 17 )
+texture_progress = ExtResource( 18 )
+fill_mode = 3
+
+[node name="Anim" type="AnimationPlayer" parent="FireHazard"]
+root_node = NodePath("../..")
+autoplay = "RESET"
+anims/Blink = SubResource( 29 )
+anims/RESET = SubResource( 30 )
+
+[node name="Life1" type="Sprite" parent="."]
+position = Vector2( 19.5, 18.5 )
+scale = Vector2( 0.145, 0.145 )
+texture = ExtResource( 22 )
+
+[node name="Life2" type="Sprite" parent="."]
+position = Vector2( 51.5, 18.5 )
+scale = Vector2( 0.145, 0.145 )
+texture = ExtResource( 22 )
+
+[node name="Life3" type="Sprite" parent="."]
+position = Vector2( 83.5, 18.5 )
+scale = Vector2( 0.145, 0.145 )
+texture = ExtResource( 22 )
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 25 )
+autoplay = true
+
+[node name="Damage" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 31 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 595, 185 )
+rotating = true
+current = true
+script = ExtResource( 34 )
+
+[node name="Hurt" type="ColorRect" parent="."]
+material = SubResource( 23 )
+margin_left = -54.0
+margin_top = -49.0
+margin_right = 1263.0
+margin_bottom = 426.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Anim" type="AnimationPlayer" parent="Hurt"]
+autoplay = "RESET"
+anims/Hurt = SubResource( 24 )
+anims/RESET = SubResource( 25 )
+
+[node name="Story" type="CanvasLayer" parent="."]
+script = ExtResource( 38 )
+
+[node name="Control" type="Control" parent="Story"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ColorRect" type="ColorRect" parent="Story/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.639216 )
+
+[node name="Label" type="Label" parent="Story/Control/ColorRect"]
+margin_left = 309.0
+margin_top = 44.0
+margin_right = 1129.0
+margin_bottom = 314.0
+custom_fonts/font = SubResource( 33 )
+text = "Text"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="Button" type="Button" parent="Story/Control/ColorRect"]
+margin_left = 977.0
+margin_top = 304.0
+margin_right = 1151.0
+margin_bottom = 347.0
+mouse_default_cursor_shape = 2
+custom_fonts/font = SubResource( 34 )
+custom_styles/hover = SubResource( 42 )
+custom_styles/pressed = SubResource( 43 )
+custom_styles/focus = SubResource( 44 )
+custom_styles/disabled = SubResource( 45 )
+custom_styles/normal = SubResource( 46 )
+text = "NEXT >"
+
+[node name="Skip" type="Button" parent="Story/Control/ColorRect"]
+margin_left = 977.0
+margin_top = 25.0
+margin_right = 1151.0
+margin_bottom = 68.0
+mouse_default_cursor_shape = 2
+custom_fonts/font = SubResource( 34 )
+custom_styles/hover = SubResource( 37 )
+custom_styles/pressed = SubResource( 38 )
+custom_styles/focus = SubResource( 39 )
+custom_styles/disabled = SubResource( 40 )
+custom_styles/normal = SubResource( 41 )
+text = "SKIP >>"
+
+[node name="Ohno" type="Control" parent="Story"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 314.0
+
+[node name="ColorRect" type="ColorRect" parent="Story/Ohno"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.639216 )
+
+[node name="Label" type="Label" parent="Story/Ohno/ColorRect"]
+margin_left = 5.0
+margin_top = 3.0
+margin_right = 1188.0
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 35 )
+text = "Text"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="FinalDay" type="TextureProgress" parent="Story"]
+margin_left = 9.0
+margin_top = 311.0
+margin_right = 509.0
+margin_bottom = 811.0
+rect_scale = Vector2( 0.101253, 0.101253 )
+max_value = 60.0
+step = 0.01
+value = 60.0
+texture_progress = ExtResource( 1 )
+fill_mode = 5
+
+[node name="Ayo" type="AudioStreamPlayer" parent="Story"]
+stream = ExtResource( 40 )
+volume_db = 8.209
+
+[node name="Hooray" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 39 )
+
+[node name="YouWin" type="Sprite" parent="."]
+visible = false
+position = Vector2( 563, 175 )
+scale = Vector2( 1e-05, 1e-05 )
+texture = ExtResource( 41 )
+
+[node name="Anim" type="AnimationPlayer" parent="YouWin"]
+autoplay = "RESET"
+anims/Go = SubResource( 54 )
+anims/RESET = SubResource( 55 )
+
+[connection signal="pressed" from="Lose/Control/Retry" to="." method="retry"]
+[connection signal="pressed" from="Lose/Control/Menu" to="." method="menu"]
+[connection signal="pressed" from="Story/Control/ColorRect/Skip" to="Story" method="skip"]
