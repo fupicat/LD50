@@ -20,10 +20,8 @@ _global_script_class_icons={
 
 [application]
 
-config/name="LD50"
+config/name="Fire Hazard"
 run/main_scene="res://Menu.tscn"
-config/use_custom_user_dir=true
-config/custom_user_dir_name="LD50"
 config/icon="res://icon.png"
 
 [autoload]
@@ -44,6 +42,10 @@ click={
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
 
 [physics]
 

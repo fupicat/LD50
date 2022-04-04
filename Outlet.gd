@@ -12,6 +12,7 @@ onready var sfx = $SFX
 func _ready():
     connect("mouse_entered", self, "on_mouse_enter")
     connect("mouse_exited", self, "on_mouse_exit")
+    # connect("input_event", self, "input_event")
         
 func plug(blaster):
     if plugged == null:
@@ -50,3 +51,10 @@ func on_mouse_enter():
 
 func on_mouse_exit():
     mouse_over = false
+
+#func input_event( viewport, event, shape_idx ):
+#    if event.type == InputEvent.SCREEN_TOUCH or event.:
+#        if event.is_pressed():
+#            print("Touch inside the area")
+#        else:
+#            print("Touch outside the area")
